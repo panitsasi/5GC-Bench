@@ -30,7 +30,7 @@ python3 --version
 cd ~
 git clone https://gitlab.eurecom.fr/oai/cn5g/oai-cn5g-fed.git
 cd ~
-git clone https://github.com/panitsasi/5gc_bench.git
+git clone https://github.com/panitsasi/5GC-Bench.git
 
 ```
 
