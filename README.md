@@ -167,7 +167,7 @@ Other available scripts (examples; names may vary by release):
 ```bash
 ./nrf_discovery_requests.sh 300 --mode par --concurrency 16   # Stress NRF discovery
 ./udm_get_auth_sub.sh 200 --mode par --concurrency 8          # Query UDM for auth/subscription
-./nrf_register_vnfs.sh 50 --mode par --concurrency 4          # Re/registration bursts to NRF
+./nrf_register_vnfs.sh 50 --mode par --concurrency 4          # Registration bursts to NRF
 ```
 > More scripts will be released shortly. Check `code/control_plane/` for the latest set and usage.
 
@@ -175,7 +175,7 @@ Other available scripts (examples; names may vary by release):
 
 ## 11) Control-Plane Experiments (Service Chains)
 
-For service chain stressing, we used gNBSIM, a UE/RAN emulator that includes standards-compliant procedures and can be driven at configurable rates and numbers of users. The following components are integrated with OAI and have been validated:
+For service chain stressing, we used gNBSIM, a UE/RAN emulator that includes standards-compliant procedures such as:
 
 1. **Registration**  
 2. **UE-initiated PDU Session Establishment**  
@@ -186,7 +186,7 @@ For service chain stressing, we used gNBSIM, a UE/RAN emulator that includes sta
 Edit `omec-gnbsim-config.yaml` to set:
 - **Procedure** (registration / session establish / de-registration)  
 - **Number of UEs** (e.g., 100, 200, 500)  
-- **Arrival pattern** (sequential, bursty) and timing knobs (inter-arrival, bursts, duration)
+- **Arrival pattern** (sequential, bursty) 
 
 > **Note:** As soon as you (re)start gNBSIM, it will execute whatever is configured here.
 
