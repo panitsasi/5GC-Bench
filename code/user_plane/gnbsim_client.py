@@ -32,7 +32,7 @@ APP_MIX_DEFAULT = {
 
 FLOW_SCHEDULE_CSV_DEFAULT = "/gnbsim/bin/high_load_connections.csv"
 
-FIXED_SLOT_MIN_DEFAULT = 1     # simulate each CSV row as this many minutes
+FIXED_SLOT_MIN_DEFAULT = 1     # simulate each CSV row 
 NUM_DAYS_DEFAULT = 1           # how many days (rows) to take from schedule (1 day = 144 rows)
 ROWS_PER_DAY = 144             # fixed: CSV is 10-min cadence → 24h * 6 = 144
 
@@ -291,3 +291,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+
