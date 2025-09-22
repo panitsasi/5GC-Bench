@@ -41,9 +41,9 @@ git clone https://github.com/panitsasi/5GC-Bench.git
 Copy the **override** files from this repo into the OAI compose folder.
 
 ```bash
-cp 5GC-bench/code/docker/docker-compose-mini-nonrf.yaml         ~/oai-cn5g-fed/docker-compose/
-cp 5GC-bench/code/docker/docker-compose-gnbsim.yaml             ~/oai-cn5g-fed/docker-compose/
-cp 5GC-bench/code/docker/docker-compose-basic-vpp-nrf.yaml      ~/oai-cn5g-fed/docker-compose/
+cp 5GC-Bench/code/docker/docker-compose-mini-nonrf.yaml         ~/oai-cn5g-fed/docker-compose/
+cp 5GC-Bench/code/docker/docker-compose-gnbsim.yaml             ~/oai-cn5g-fed/docker-compose/
+cp 5GC-Bench/code/docker/docker-compose-basic-vpp-nrf.yaml      ~/oai-cn5g-fed/docker-compose/
 ```
 
 ---
