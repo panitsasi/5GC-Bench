@@ -41,9 +41,9 @@ git clone https://github.com/panitsasi/5GC-Bench.git
 Copy the **override** files from this repo into the OAI compose folder.
 
 ```bash
-cp code/docker/docker-compose-mini-nonrf.yaml         ~/oai-cn5g-fed/docker-compose/
-cp code/docker/docker-compose-gnbsim.yaml             ~/oai-cn5g-fed/docker-compose/
-cp code/docker/docker-compose-basic-vpp-nrf.yaml      ~/oai-cn5g-fed/docker-compose/
+cp 5GC-bench/code/docker/docker-compose-mini-nonrf.yaml         ~/oai-cn5g-fed/docker-compose/
+cp 5GC-bench/code/docker/docker-compose-gnbsim.yaml             ~/oai-cn5g-fed/docker-compose/
+cp 5GC-bench/code/docker/docker-compose-basic-vpp-nrf.yaml      ~/oai-cn5g-fed/docker-compose/
 ```
 
 ---
@@ -60,8 +60,8 @@ docker tag  rohankharade/5gc-gnbsim:0.0.1-dev  5gc-gnbsim:0.0.1-dev
 
 ```bash
 # Copy the updated Dockerfiles
-cp ~/code/docker/Dockerfile.ubuntu.22.04_updated ~/gnbsim/docker/Dockerfile.ubuntu.22.04_updated
-cp ~/code/docker/Dockerfile.traffic.generator.ubuntu_updated ~/oai-cn5g-fed/ci-scripts/Dockerfile.traffic.generator.ubuntu_updated
+cp ~/5GC-Bench/code/docker/Dockerfile.ubuntu.22.04_updated ~/gnbsim/docker/Dockerfile.ubuntu.22.04_updated
+cp ~/5GC-Bench/code/docker/Dockerfile.traffic.generator.ubuntu_updated ~/oai-cn5g-fed/ci-scripts/Dockerfile.traffic.generator.ubuntu_updated
 
 # Build the updated images
 cd ~/gnbsim
@@ -78,14 +78,15 @@ docker build --target trf-gen-cn5g --tag trf-gen-cn5g-updated:latest --file ci-s
 ```bash
 
 # Move all user plane CSV traces from 5GC_Bench/data into ~/gnbsim and ci-scripts folder
-mv ~/5GC_Bench/data/*.csv ~/gnbsim/
-mv ~/5GC_Bench/data/*.csv ~/oai-cn5g-fed/ci-scripts/
+mv ~/5GC-Bench/data/*.csv ~/gnbsim/
+mv ~/5GC-Bench/data/*.csv ~/oai-cn5g-fed/ci-scripts/
+
 # Move the gnbsim client and server scripts into ~/gnbsim and rename them
-mv ~/5GC_Bench/code/user_plane/gnbsim_client.py ~/gnbsim/client.py
-mv ~/5GC_Bench/code/user_plane/gnbsim_server.py ~/gnbsim/server.py
+mv ~/5GC-Bench/code/user_plane/gnbsim_client.py ~/gnbsim/client.py
+mv ~/5GC-Bench/code/user_plane/gnbsim_server.py ~/gnbsim/server.py
 # Move the traffic_dn_client and server scripts into ~/oai-cn5g-fed/ci-scripts and rename them
-mv ~/5GC_Bench/code/user_plane/traffic_dn_client.py ~/oai-cn5g-fed/ci-scripts/client.py
-mv ~/5GC_Bench/code/user_plane/traffic_dn_server.py ~/oai-cn5g-fed/ci-scripts/server.py
+mv ~/5GC-Bench/code/user_plane/traffic_dn_client.py ~/oai-cn5g-fed/ci-scripts/client.py
+mv ~/5GC-Bench/code/user_plane/traffic_dn_server.py ~/oai-cn5g-fed/ci-scripts/server.py
 
 ```
 ---
@@ -108,7 +109,7 @@ python3 ./core-network.py --type start-basic-vpp --scenario 1
 From the **5GC-Bench** repo:
 
 ```bash
-cd ~/code/control_plane/
+cd ~/5GC-Bench/code/control_plane/
 python3 collect_metrics_core.py
 ```
 
@@ -137,7 +138,7 @@ docker compose -f docker-compose-omec-gnbsim-vpp.yaml up -d
 You can quickly provision many UEs in the 5G Core using the helper script:
 
 ```bash
-cd ~/code/control_plane
+cd ~/5GC-Bench/code/control_plane
 ./add_subscribers.sh 208950000000132 100
 ```
 
@@ -153,7 +154,7 @@ cd ~/code/control_plane
 Before running full service chains, you can **stress individual control-plane VNFs** with the helper scripts in `code/control_plane/`. Example (AUSF authentication vector generation):
 
 ```bash
-cd ~/code/control_plane
+cd ~/5GC-Bench/code/control_plane
 ./ausf_generate_auth.sh 200 --mode par --concurrency 8
 ```
 
@@ -206,7 +207,7 @@ docker compose -f docker-compose-omec-gnbsim-vpp.yaml up -d
 
 ## 11) User-Plane Experiments (UPF stress / realistic traffic)
 
-After establishing PDU sessions (e.g., via §9), you can stress the **UPF** with synthetic or trace-driven traffic. Keep the telemetry collector running.
+You can also stress the **UPF** with synthetic or trace-driven traffic. Keep the telemetry collector running.
 
 - **Synthetic sanity check:** run `iperf3` server in the DN and clients from UEs.  
 - **Trace-driven:** use the UPLI helpers in `code/user_plane/` to replay **YouTube/Instagram/Browsing/Gaming** or mixed profiles derived from TelecomTS/NetMob.
@@ -226,6 +227,8 @@ docker compose -f docker-compose-gnbsim.yaml up -d gnbsim
 
 # 4. Synthetic: DN-side iperf3 server
 docker exec -it oai-ext-dn iperf3 -s
+
+# Create and Use 4 different terminals
 
 # 5. Trace-driven: per-UE replay (uplink)
 docker exec -it gnbsim python3 client.py \
@@ -263,7 +266,7 @@ python3 ./core-network.py --type stop-basic-vpp --scenario 1
 
 ## Data
 
-If you plan to use this setup, please send an email to **ioannis.panitsas@yale.edu** to receive the user-plane data and traffic traces.
+If you plan to use this setup, please send an email to **ioannis.panitsas@yale.edu** to receive the user-plane data and traffic traces. Github does not allow files bigger than 25 MB. Here we added only a sample of them. 
 
 ## Citation
 
