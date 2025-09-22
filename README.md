@@ -8,7 +8,6 @@ With **5GC-Bench**, researchers and practitioners can:
 - **Reproduce** experiments easily with containerized deployments and automated scripts.  
 
 This README provides instructions for downloading, setting up, and running **5GC-Bench**, along with details on environment requirements and experiment execution.  
----
 
 ## 0) Prerequisites
 
