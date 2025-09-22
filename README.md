@@ -1,11 +1,13 @@
-# 5GC-Bench
+# 5GC-Bench  
 
-This README guides you through reproducing the **5GC-Bench** experiments to stress-test 5G Core (5GC) VNFs using OpenAirInterface (OAI) and gNBSIM. It covers environment setup, core deployment, telemetry collection, and how to run control-plane service chains and user-plane workloads.
+**5GC-Bench** is a benchmarking and stress-testing framework for the 5G Core (5GC). It provides a reproducible environment to evaluate the performance, scalability, and resilience of 5GC Virtual Network Functions (VNFs) under diverse workloads. The framework integrates the OpenAirInterface (OAI) 5GC and gNBSIM UE/RAN simulator, enabling both control-plane and user-plane experiments.  
 
-> **Tested on:** Ubuntu 22.04, Docker 27.5.0, Docker Compose v2, Python 3.10+.  
-> **Core:** OAI CN5G v2.1.0  
-> **Access side:** gNBSIM (UE/RAN simulator)
+With **5GC-Bench**, researchers and practitioners can:  
+- **Stress-test** core components (AMF, SMF, UPF, etc.) using configurable workloads.  
+- **Benchmark** CPU, memory, and networking overheads with telemetry at fine-grained resolution.  
+- **Reproduce** experiments easily with containerized deployments and automated scripts.  
 
+This README provides instructions for downloading, setting up, and running **5GC-Bench**, along with details on environment requirements and experiment execution.  
 ---
 
 ## 0) Prerequisites
@@ -73,7 +75,7 @@ docker build --target trf-gen-cn5g --tag trf-gen-cn5g-updated:latest --file ci-s
 ```
 ---
 
-## 4) Fetch the user plane traffic traces
+## 5) Fetch the user plane traffic traces
 
 ```bash
 
@@ -91,7 +93,7 @@ mv ~/5GC-Bench/code/user_plane/traffic_dn_server.py ~/oai-cn5g-fed/ci-scripts/se
 ```
 ---
 
-## 5) Deploy the OAI 5G Core 
+## 6) Deploy the OAI 5G Core 
 
 ```bash
 cd ~/oai-cn5g-fed/docker-compose
@@ -104,7 +106,7 @@ python3 ./core-network.py --type start-basic-vpp --scenario 1
 
 ---
 
-## 6) Start the Telemetry Collector
+## 7) Start the Telemetry Collector
 
 From the **5GC-Bench** repo:
 
@@ -120,7 +122,7 @@ python3 collect_metrics_core.py
 
 ---
 
-## 7) Launch gNBSIM
+## 8) Launch gNBSIM
 
 Use the pre-configured compose file:
 
@@ -133,7 +135,7 @@ docker compose -f docker-compose-omec-gnbsim-vpp.yaml up -d
 
 ---
 
-## 8) Add subscribers (optional, for large scale experiments)
+## 9) Add subscribers (optional, for large scale experiments)
 
 You can quickly provision many UEs in the 5G Core using the helper script:
 
@@ -149,7 +151,7 @@ cd ~/5GC-Bench/code/control_plane
 
 ---
 
-## 9) Control-Plane VNF Micro-Benchmarks (Targeted)
+## 10) Control-Plane VNF Micro-Benchmarks (Targeted)
 
 Before running full service chains, you can **stress individual control-plane VNFs** with the helper scripts in `code/control_plane/`. Example (AUSF authentication vector generation):
 
@@ -172,7 +174,7 @@ Other available scripts (examples; names may vary by release):
 
 ---
 
-## 10) Control-Plane Experiments (Service Chains)
+## 11) Control-Plane Experiments (Service Chains)
 
 For service chain stressing, we used gNBSIM, a UE/RAN emulator that includes standards-compliant procedures and can be driven at configurable rates and numbers of users. The following components are integrated with OAI and have been validated:
 
@@ -180,7 +182,7 @@ For service chain stressing, we used gNBSIM, a UE/RAN emulator that includes sta
 2. **UE-initiated PDU Session Establishment**  
 3. **UE-initiated De-registration**
 
-### 10.1 Configure procedure & load
+### 11.1 Configure procedure & load
 
 Edit `omec-gnbsim-config.yaml` to set:
 - **Procedure** (registration / session establish / de-registration)  
@@ -189,7 +191,7 @@ Edit `omec-gnbsim-config.yaml` to set:
 
 > **Note:** As soon as you (re)start gNBSIM, it will execute whatever is configured here.
 
-### 10.2 Run the scenario
+### 11.2 Run the scenario
 
 ```bash
 # Apply your desired gNBSIM config (already mounted via compose)
@@ -205,7 +207,7 @@ docker compose -f docker-compose-omec-gnbsim-vpp.yaml up -d
 
 ---
 
-## 11) User-Plane Experiments (UPF stress / realistic traffic)
+## 12) User-Plane Experiments (UPF stress / realistic traffic)
 
 You can also stress the **UPF** with synthetic or trace-driven traffic. Keep the telemetry collector running.
 
@@ -249,7 +251,7 @@ docker exec -it oai-ext-dn python3 server.py
 
 ---
 
-## 12) Stopping & Cleanup
+## 13) Stopping & Cleanup
 
 Stop **gNBSIM** (choose the file you used):
 ```bash
