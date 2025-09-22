@@ -1,0 +1,62 @@
+#---------------------------------------------------------------------
+# BUILDER IMAGE
+#---------------------------------------------------------------------
+FROM ubuntu:jammy as gnbsim-builder
+
+RUN apt-get update && apt-get install -y wget build-essential
+
+RUN wget https://dl.google.com/go/go1.13.3.linux-amd64.tar.gz \
+    && tar -xvf go1.13.3.linux-amd64.tar.gz \
+    && mv go /usr/local
+ENV GOROOT=/usr/local/go
+RUN mkdir goproject
+ENV GOPATH=/goproject
+ENV PATH=$GOPATH/bin:$GOROOT/bin:$PATH
+
+# Bring the repo into the build stage
+COPY . /
+
+# Build gnbsim bits
+RUN cd /gnbsim/cmd && go build .
+RUN cd /example && go build .
+
+#---------------------------------------------------------------------
+# TARGET IMAGE
+#---------------------------------------------------------------------
+FROM ubuntu:jammy as gnbsim
+
+# Tools + Python
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y \
+    wget iproute2 iputils-ping iperf3 net-tools curl traceroute nano \
+    python3 python3-pip python3-venv \
+ && rm -rf /var/lib/apt/lists/*
+
+# Optional: useful Python libs
+RUN pip3 install --no-cache-dir numpy pandas matplotlib scapy
+
+# Go env (as in original)
+WORKDIR /usr/local
+COPY --from=gnbsim-builder /usr/local/go .
+ENV GOROOT=/usr/local/go
+RUN mkdir goproject
+ENV GOPATH=/goproject
+ENV PATH=$GOPATH/bin:$GOROOT/bin:$PATH
+
+# Binaries and configs
+WORKDIR /gnbsim/bin
+COPY --from=gnbsim-builder /example/example .
+COPY --from=gnbsim-builder /docker/example.json .
+COPY --from=gnbsim-builder /docker/entrypoint.sh .
+
+# --- Your CSVs and Python scripts (no folders; keep filenames exact) ---
+# Make sure these files exist in the build context (gnbsim/ directory) before building.
+COPY browsing_uplink.csv mixed_traffic_uplink.csv high_load_connections.csv facebook_uplink.csv youtube_uplink.csv instagram_uplink.csv server.py client.py ./
+
+# Ensure scripts are runnable and add convenient aliases
+RUN chmod +x /gnbsim/bin/entrypoint.sh /gnbsim/bin/server.py /gnbsim/bin/client.py && \
+    ln -sf /gnbsim/bin/server.py /usr/local/bin/udp_server && \
+    ln -sf /gnbsim/bin/client.py /usr/local/bin/udp_client
+
+ENTRYPOINT ["/gnbsim/bin/entrypoint.sh"]
+CMD ["sh","-c","/gnbsim/bin/example && sleep infinity"]
+

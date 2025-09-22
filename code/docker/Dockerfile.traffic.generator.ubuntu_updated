@@ -1,0 +1,30 @@
+ARG BASE_IMAGE=ubuntu:jammy
+FROM $BASE_IMAGE as trf-gen-cn5g
+
+ENV DEBIAN_FRONTEND=noninteractive
+ENV TZ=Europe/Paris
+
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    apt-get install -y --no-install-recommends \
+      psmisc net-tools ethtool tshark tzdata iperf iproute2 iputils-ping \
+      iptables traceroute tcpdump iperf3 \
+      python3 python3-pip python3-venv nano vim-tiny less \
+      curl wget ca-certificates jq socat netcat-openbsd \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN pip3 install --no-cache-dir numpy pandas matplotlib scapy
+
+WORKDIR /tmp
+
+COPY trfgen_entrypoint.sh .
+
+COPY browsing_downlink.csv mixed_traffic_downlink.csv high_load_connections.csv facebook_downlink.csv youtube_downlink.csv instagram_downlink.csv server.py client.py ./
+
+RUN chmod +x /tmp/server.py /tmp/client.py && \
+    ln -sf /tmp/server.py /usr/local/bin/udp_server && \
+    ln -sf /tmp/client.py /usr/local/bin/udp_client
+
+ENTRYPOINT ["/bin/bash","/tmp/trfgen_entrypoint.sh"]
+CMD ["sleep", "infinity"]
+
