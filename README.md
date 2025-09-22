@@ -267,4 +267,4 @@ If you plan to use this setup, please send an email to **ioannis.panitsas@yale.e
 
 ## Citation
 
-If you use this setup, please cite the **5GC-Bench** paper.
+If you use this setup, please cite our paper **5GC-Bench: A Framework for Stress-Testing and Benchmarking 5G Core VNFs**.
