@@ -49,11 +49,11 @@ cp 5GC-Bench/code/docker/docker-compose-basic-vpp-nrf.yaml      ~/oai-cn5g-fed/d
 
 ---
 
-## 3) Pull and tag gNBSIM image
+## 3) Clone gNBSIM
 
 ```bash
-docker pull rohankharade/5gc-gnbsim:0.0.1-dev
-docker tag  rohankharade/5gc-gnbsim:0.0.1-dev  5gc-gnbsim:0.0.1-dev
+cd
+git clone https://gitlab.eurecom.fr/kharade/gnbsim.git
 ```
 ---
 
@@ -271,4 +271,9 @@ If you plan to use this setup, please send an email to **ioannis.panitsas@yale.e
 
 ## Citation
 
-If you use this setup, please cite our paper **5GC-Bench: A Framework for Stress-Testing and Benchmarking 5G Core VNFs**.
+If you use this setup, please cite our paper:
+
+> **I. Panitsas, T. O. Atalay, D. Stojadinovic, A. Stavrou, and L. Tassiulas**,  
+> *5GC-Bench: A Framework for Stress-Testing and Benchmarking 5G Core VNFs*,  
+> arXiv preprint arXiv:2509.18443, 2025.  
+> doi: https://doi.org/10.48550/arXiv.2509.18443
